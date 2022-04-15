@@ -1,0 +1,2 @@
+CREATE DATABASE books;
+CREATE DATABASE users;

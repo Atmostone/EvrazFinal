@@ -1,0 +1,63 @@
+services:
+  web-users:
+    build:
+      context: ./components/users
+      dockerfile: Dockerfile
+    command: gunicorn composites.user_api:app --bind 0.0.0.0:8001
+    env_file:
+      - envs/.env.users
+    restart: unless-stopped
+    depends_on:
+      - db_postgres
+
+  web-books:
+    build:
+      context: ./components/books
+      dockerfile: Dockerfile
+    command: gunicorn composites.book_api:app --bind 0.0.0.0:8002
+    env_file:
+      - envs/.env.books
+    restart: unless-stopped
+    depends_on:
+      - db_postgres
+
+  book_consumer:
+    build:
+      context: ./components/books
+      dockerfile: Dockerfile
+    command: python3 -m composites.consumer
+    env_file:
+      - envs/.env.books.cons
+    restart: unless-stopped
+    depends_on:
+      - db_postgres
+
+  db_postgres:
+    build: ./components/postgres
+    env_file:
+      - envs/.env.db
+    restart: unless-stopped
+    depends_on:
+      - rabbitmq
+
+  nginx:
+    build: ./components/gateway
+    ports:
+      - 1337:80
+    restart: unless-stopped
+    depends_on:
+      - web-users
+
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    env_file:
+      - envs/.env.rabbit
+    volumes:
+      - "rabbitmq_data:/data"
+
+volumes:
+  postgres_data:
+  rabbitmq_data:
