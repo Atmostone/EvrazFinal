@@ -18,8 +18,8 @@ class BookInfo(DTO):
     subtitle: str
     authors: str
     publisher: str
-    isbn10: int
-    isbn13: int
+    isbn10: str
+    isbn13: str
     pages: int
     year: int
     rating: int
@@ -29,7 +29,6 @@ class BookInfo(DTO):
     image: Optional[str]
     url: Optional[str]
     id: Optional[int] = None
-    pdf: Optional[dict] = None
     error: Optional[str] = None
 
 
@@ -48,8 +47,9 @@ class Books:
 
     @join_point
     @validate_arguments
-    def add_book(self, book: dict):
-        book = Book(**book)
+    def add_book(self, data: dict):
+        book = Book(**data)
+        print('!!!!!!!!!!', book)
         self.book_repo.add_instance(book)
 
 

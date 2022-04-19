@@ -9,8 +9,8 @@ class Book:
     subtitle: str
     authors: str
     publisher: str
-    isbn10: int
-    isbn13: int
+    isbn10: str
+    isbn13: str
     pages: int
     year: int
     rating: int
@@ -21,4 +21,3 @@ class Book:
     error: Optional[str] = None
     url: Optional[str] = None
     id: Optional[int] = None
-    pdf: Optional[dict] = None

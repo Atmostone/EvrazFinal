@@ -25,13 +25,14 @@ class DB:
 
 class MessageBus:
     connection = Connection(Settings.message_bus.BROKER_URL)
-    print(connection)
-    message_bus.broker_scheme.declare(connection)
-
     publisher = KombuPublisher(
         connection=connection,
         scheme=message_bus.broker_scheme,
-    )
+        messages_params={
+            'queue': {
+                'exchange': 'exchange',
+            }
+        }, )
 
 
 class Application:

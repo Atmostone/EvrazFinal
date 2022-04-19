@@ -40,7 +40,7 @@ class Loader:
             for id in ids:
                 response = requests.get(f'https://api.itbook.store/1.0/books/{id}', verify=False).json()
 
-                response['created'] = datetime.datetime.now()
+
                 print(response)
 
                 publisher.publish(

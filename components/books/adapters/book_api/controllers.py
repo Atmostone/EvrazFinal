@@ -15,10 +15,18 @@ class Books:
     def on_get_show_info(self, request, response):
         book = self.books.get_info(**request.params)
         response.media = {
-            'id': book.id,
             'title': book.title,
-            'author': book.author,
-            'published year': book.published_year,
+            'subtitle': book.subtitle,
+            'authors': book.authors,
+            'publisher': book.publisher,
+            'isbn10': book.isbn10,
+            'isbn13': book.isbn13,
+            'pages': book.pages,
+            'year': book.year,
+            'rating': book.rating,
+            'desc': book.desc,
+            'price': book.price,
+            'language': book.language,
         }
 
     @join_point
@@ -32,10 +40,18 @@ class Books:
     def on_get_show_all(self, request, response):
         books = self.books.get_all()
         response.media = [{
-            'book id': book.id,
-            'author': book.author,
-            'published year': book.published_year,
-            'title': book.title
+            'title': book.title,
+            'subtitle': book.subtitle,
+            'authors': book.authors,
+            'publisher': book.publisher,
+            'isbn10': book.isbn10,
+            'isbn13': book.isbn13,
+            'pages': book.pages,
+            'year': book.year,
+            'rating': book.rating,
+            'desc': book.desc,
+            'price': book.price,
+            'language': book.language,
         } for book in books]
 
     @join_point

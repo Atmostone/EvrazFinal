@@ -4,25 +4,16 @@ from sqlalchemy import create_engine
 
 from adapters import book_api, database, message_bus
 from application import services
+from composites.book_api import DB
 
 
 class Settings:
     db = database.Settings()
-    book_api = book_api.Settings()
     message_bus = message_bus.Settings()
 
 
-class DB:
-    engine = create_engine(Settings.db.DB_URL, echo=True)
-    database.metadata.create_all(engine)
-
-    context = TransactionContext(bind=engine)
-
-    books_repo = database.repositories.BooksRepo(context=context)
-
 
 class Application:
-    is_dev_mode = Settings.book_api.IS_DEV_MODE
     books = services.Books(book_repo=DB.books_repo)
 
 

@@ -18,8 +18,8 @@ class DB:
     engine = create_engine(Settings.db.DB_URL, echo=True)
     database.metadata.create_all(engine)
 
-    context = TransactionContext(bind=engine)
-    Session = sessionmaker(bind=engine)
+    context = TransactionContext(bind=engine, expire_on_commit=False)
+
     books_repo = database.repositories.BooksRepo(context=context)
 
 

@@ -17,8 +17,8 @@ BOOK = Table(
     Column('subtitle', String(500)),
     Column('authors', String(350)),
     Column('publisher', String(350)),
-    Column('isbn10', BigInteger),
-    Column('isbn13', BigInteger),
+    Column('isbn10', String(20)),
+    Column('isbn13', String(20)),
     Column('pages', Integer),
     Column('year', Integer),
     Column('rating', Integer),
@@ -26,7 +26,6 @@ BOOK = Table(
     Column('price', String(35)),
     Column('image', String(350), nullable=True),
     Column('url', String(350), nullable=True),
-    Column('pdf', String(500), nullable=True),
     Column('error', String(50), nullable=True),
     Column('language', String(50), nullable=True),
 )

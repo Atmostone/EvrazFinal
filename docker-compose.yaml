@@ -9,6 +9,7 @@ services:
     restart: unless-stopped
     depends_on:
       - db_postgres
+      - rabbitmq
 
   web-books:
     build:
@@ -20,6 +21,7 @@ services:
     restart: unless-stopped
     depends_on:
       - db_postgres
+      - rabbitmq
 
   book_consumer:
     build:
@@ -31,11 +33,14 @@ services:
     restart: unless-stopped
     depends_on:
       - db_postgres
+      - rabbitmq
 
   db_postgres:
     build: ./components/postgres
     env_file:
       - envs/.env.db
+    ports:
+      - 5432:5432
     restart: unless-stopped
     depends_on:
       - rabbitmq
@@ -47,6 +52,8 @@ services:
     restart: unless-stopped
     depends_on:
       - web-users
+      - rabbitmq
+      - db_postgres
 
   rabbitmq:
     image: "rabbitmq:3-management"

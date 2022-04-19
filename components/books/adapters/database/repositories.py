@@ -16,21 +16,15 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
         result = self.session.execute(query).fetchone()
         return result
 
-    # def add_instance(self, book: Book):
-    #     query = BOOK.insert().values(
-    #         author=book.author,
-    #         published_year=book.published_year,
-    #         title=book.title,
-    #         user_id=None
-    #     )
-    #     self.session.execute(query)
-    #     book = select(BOOK).order_by(desc(BOOK.c.id))
-    #     book = self.session.execute(book).fetchone()
-    #     return {'id_book': book.id, 'name': book.title}
+
     def add_instance(self, book: Book):
+        print('aaa')
         self.session.add(book)
+        print('bbb')
         self.session.flush()
-        return book
+        print(book)
+        print('ccc')
+
 
     def get_all(self) -> List[Book]:
         query = select(BOOK)
