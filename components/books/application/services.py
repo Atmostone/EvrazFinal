@@ -1,4 +1,5 @@
 import json
+from datetime import datetime, timedelta
 from typing import Optional, List
 
 from evraz.classic.app import DTO
@@ -15,6 +16,7 @@ join_point = join_points.join_point
 
 
 class BookInfo(DTO):
+    id: int
     title: str
     subtitle: str
     authors: str
@@ -27,10 +29,14 @@ class BookInfo(DTO):
     desc: str
     price: str
     language: str
+    expiration_date: Optional[datetime] = None
+    owner: Optional[int] = None
+    is_bought: Optional[bool] = None
     image: Optional[str]
     url: Optional[str]
-    id: Optional[int] = None
     error: Optional[str] = None
+
+
 
 
 @component
@@ -53,6 +59,17 @@ class Books:
         self.book_repo.add_instance(book)
 
     @join_point
+    @validate_arguments
+    def take_book(self, id_book: int, id_user: int, days: Optional[int]):
+        book = self.book_repo.get_by_id(id_book)
+        print(book)
+
+        if book.expiration_date is None or book.expiration_date < datetime.now():
+            self.book_repo.take_book(id_book=id_book, id_user=id_user)
+
+
+
+    @join_point
     def send_to_users(self, sep_ids):
         for ids in sep_ids:
             books = self.book_repo.get_top3(ids)
@@ -69,36 +86,6 @@ class Books:
             print('Send', titles)
 
     @join_point
-    @validate_arguments
-    def delete_book(self, id: int):
-        book = self.book_repo.get_by_id(id)
-        if not book:
-            raise Exception
-        self.book_repo.delete_instance(id)
-
-    @join_point
     def get_all(self) -> List[Book]:
         books = self.book_repo.get_all()
         return books
-
-    @join_point
-    @validate_arguments
-    def return_book(self, book_id: int, user_id: int):
-        book = self.book_repo.get_by_id(book_id)
-        if not book:
-            raise Exception
-        if book.user_id == user_id:
-            self.book_repo.return_book(book_id)
-        else:
-            raise Exception
-
-    @join_point
-    @validate_arguments
-    def take_book(self, book_id: int, user_id: int):
-        book = self.book_repo.get_by_id(book_id)
-        if not book:
-            raise Exception
-        if book.user_id is None:
-            self.book_repo.take_book(book_id=book_id, user_id=user_id)
-        else:
-            raise Exception

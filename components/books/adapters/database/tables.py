@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, MetaData, String, Table, BigInteger
+from sqlalchemy import Column, Integer, MetaData, String, Table, BigInteger, Boolean, ForeignKey, DateTime
 
 naming_convention = {
     'ix': 'ix_%(column_0_label)s',
@@ -24,8 +24,11 @@ BOOK = Table(
     Column('rating', Integer),
     Column('desc', String(10000)),
     Column('price', String(35)),
+    Column('is_bought', Boolean, default=False),
     Column('image', String(350), nullable=True),
     Column('url', String(350), nullable=True),
     Column('error', String(50), nullable=True),
     Column('language', String(50), nullable=True),
+    Column('expiration_date', DateTime, default=None),
+    Column('owner', Integer, default=None),
 )

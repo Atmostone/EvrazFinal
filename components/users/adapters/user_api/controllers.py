@@ -41,8 +41,7 @@ class Users:
     def on_get_show_all(self, request, response):
         users = self.users.get_all()
         response.media = [{'id': user.id,
-                           'name': user.name,
-                           'login': user.login}
+                           'name': user.name}
                           for user in users]
 
     @join_point

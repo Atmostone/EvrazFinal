@@ -1,8 +1,19 @@
+import json
+from datetime import datetime, date
+
 from evraz.classic.components import component
 from evraz.classic.http_auth import authenticate, authenticator_needed
 
 from application import services
 from .join_points import join_point
+
+
+def json_serial(obj):
+    """JSON serializer for objects not serializable by default json code"""
+
+    if isinstance(obj, (datetime, date)):
+        return obj.isoformat()
+    raise TypeError("Type %s not serializable" % type(obj))
 
 
 @authenticator_needed
@@ -15,6 +26,7 @@ class Books:
     def on_get_show_info(self, request, response):
         book = self.books.get_info(**request.params)
         response.media = {
+            'id': book.id,
             'title': book.title,
             'subtitle': book.subtitle,
             'authors': book.authors,
@@ -27,19 +39,24 @@ class Books:
             'desc': book.desc,
             'price': book.price,
             'language': book.language,
+            'is_bought': book.is_bought,
+            'owner': book.owner,
         }
 
     @join_point
     @authenticate
-    def on_post_add_book(self, request, response):
-        self.books.add_book(**request.media)
-        response.media = {'status': 'book added'}
+    def on_post_take_book(self, request, response):
+        self.books.take_book(**request.media)
+        response.media = {
+            'message': 'Вы успешно взяли книгу'
+        }
 
     @join_point
     @authenticate
     def on_get_show_all(self, request, response):
         books = self.books.get_all()
         response.media = [{
+            'id': book.id,
             'title': book.title,
             'subtitle': book.subtitle,
             'authors': book.authors,
@@ -52,24 +69,7 @@ class Books:
             'desc': book.desc,
             'price': book.price,
             'language': book.language,
+            'is_bought': book.is_bought,
+            'expiration_date': str(book.expiration_date),
+            'owner': book.owner,
         } for book in books]
-
-    @join_point
-    @authenticate
-    def on_get_delete_book(self, request, response):
-        self.books.delete_book(**request.params)
-        response.media = {'status': 'book deleted'}
-
-    @join_point
-    @authenticate
-    def on_post_take_book(self, request, response):
-        request.media['user_id'] = request.context.client.user_id
-        self.books.take_book(**request.media)
-        response.media = {'status': 'ok'}
-
-    @join_point
-    @authenticate
-    def on_post_return_book(self, request, response):
-        request.media['user_id'] = request.context.client.user_id
-        self.books.return_book(**request.media)
-        response.media = {'status': 'ok'}

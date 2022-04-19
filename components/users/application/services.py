@@ -42,7 +42,9 @@ class Users:
 
     @join_point
     def print_books(self, books):
-        print(books)
+        users = self.user_repo.get_all()
+        for user in users:
+            print(f'Send top 3 books to user {user.name}: {books}')
 
     @join_point
     @validate_arguments
@@ -62,7 +64,6 @@ class Users:
         if not user:
             raise Exception
         self.user_repo.delete_instance(id)
-
 
     @join_point
     def get_all(self) -> List[User]:
