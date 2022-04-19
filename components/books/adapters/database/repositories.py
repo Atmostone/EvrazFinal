@@ -5,7 +5,7 @@ from application.dataclasses import Book
 from .tables import BOOK
 from evraz.classic.components import component
 from evraz.classic.sql_storage import BaseRepository
-from sqlalchemy import select, update
+from sqlalchemy import select, update, desc, asc
 
 
 @component
@@ -16,15 +16,13 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
         result = self.session.execute(query).fetchone()
         return result
 
-
     def add_instance(self, book: Book):
-        print('aaa')
         self.session.add(book)
-        print('bbb')
         self.session.flush()
-        print(book)
-        print('ccc')
 
+    def get_top3(self, ids):
+        return self.session.query(Book).filter(Book.isbn13.in_(ids)).order_by(
+            desc(Book.rating), asc(Book.year)).limit(3).all()
 
     def get_all(self) -> List[Book]:
         query = select(BOOK)

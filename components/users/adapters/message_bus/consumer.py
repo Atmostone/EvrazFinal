@@ -6,13 +6,13 @@ from .scheme import broker_scheme
 
 
 def create_consumer(
-        connection: Connection, book: services.Books
+        connection: Connection, user: services.Users
 ) -> KombuConsumer:
     consumer = KombuConsumer(connection=connection, scheme=broker_scheme)
 
     consumer.register_function(
-        book.add_book,
-        'BookQueue',
+        user.print_books,
+        'UserQueue',
     )
 
 

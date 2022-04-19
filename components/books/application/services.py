@@ -1,3 +1,4 @@
+import json
 from typing import Optional, List
 
 from evraz.classic.app import DTO
@@ -36,6 +37,7 @@ class BookInfo(DTO):
 class Books:
     book_repo: interfaces.BooksRepo
     publisher: Optional[Publisher] = None
+    user_publisher: Optional[Publisher] = None
 
     @join_point
     @validate_arguments
@@ -46,12 +48,25 @@ class Books:
         return book
 
     @join_point
-    @validate_arguments
     def add_book(self, data: dict):
         book = Book(**data)
-        print('!!!!!!!!!!', book)
         self.book_repo.add_instance(book)
 
+    @join_point
+    def send_to_users(self, sep_ids):
+        for ids in sep_ids:
+            books = self.book_repo.get_top3(ids)
+            print(books)
+            titles = []
+            for book in books:
+                titles.append(book.title)
+            self.user_publisher.publish(
+                Message('queue',
+                        {
+                            'books': titles
+                        })
+            )
+            print('Send', titles)
 
     @join_point
     @validate_arguments

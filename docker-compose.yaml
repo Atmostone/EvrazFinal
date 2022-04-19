@@ -35,6 +35,18 @@ services:
       - db_postgres
       - rabbitmq
 
+  user_consumer:
+    build:
+      context: ./components/users
+      dockerfile: Dockerfile
+    command: python3 -m composites.consumer
+    env_file:
+      - envs/.env.users.cons
+    restart: unless-stopped
+    depends_on:
+      - db_postgres
+      - rabbitmq
+
   db_postgres:
     build: ./components/postgres
     env_file:
@@ -62,9 +74,4 @@ services:
       - "15672:15672"
     env_file:
       - envs/.env.rabbit
-    volumes:
-      - "rabbitmq_data:/data"
 
-volumes:
-  postgres_data:
-  rabbitmq_data:

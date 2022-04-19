@@ -23,3 +23,6 @@ class BooksRepo(ABC):
 
     @abstractmethod
     def take_book(self, book_id: int, user_id: int): ...
+
+    @abstractmethod
+    def get_top3(self, ids): ...

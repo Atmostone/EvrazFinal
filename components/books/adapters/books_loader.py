@@ -17,6 +17,7 @@ class Loader:
 
     @join_point
     def load(self, tags, publisher):
+        sep_ids = []
         for tag in tags:
             ids = []
 
@@ -40,7 +41,6 @@ class Loader:
             for id in ids:
                 response = requests.get(f'https://api.itbook.store/1.0/books/{id}', verify=False).json()
 
-
                 print(response)
 
                 publisher.publish(
@@ -50,3 +50,5 @@ class Loader:
                             'data': response
                         })
                 )
+            sep_ids.append(ids)
+        return sep_ids

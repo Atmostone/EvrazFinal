@@ -15,7 +15,7 @@ class Settings:
 
 
 class DB:
-    engine = create_engine(Settings.db.DB_URL, echo=True)
+    engine = create_engine(Settings.db.DB_URL)
     database.metadata.create_all(engine)
 
     context = TransactionContext(bind=engine, expire_on_commit=False)
@@ -32,13 +32,25 @@ class MessageBus:
         messages_params={
             'queue': {
                 'exchange': 'exchange',
+                'routing_key': 'books',
             }
         },)
+
+    user_publisher = KombuPublisher(
+        connection=connection,
+        scheme=message_bus.broker_scheme,
+        messages_params={
+            'queue': {
+                'exchange': 'exchange',
+                'routing_key': 'users',
+            }
+        },
+    )
 
 
 class Application:
     is_dev_mode = Settings.book_api.IS_DEV_MODE
-    books = services.Books(book_repo=DB.books_repo, publisher=MessageBus.publisher)
+    books = services.Books(book_repo=DB.books_repo, publisher=MessageBus.publisher, user_publisher=MessageBus.user_publisher)
 
 
 class Aspects:

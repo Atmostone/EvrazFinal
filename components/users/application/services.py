@@ -41,6 +41,10 @@ class Users:
         return new_user
 
     @join_point
+    def print_books(self, books):
+        print(books)
+
+    @join_point
     @validate_arguments
     def login_user(self, user_login: str, user_password: str):
         user = self.user_repo.get_by_login(user_login)
