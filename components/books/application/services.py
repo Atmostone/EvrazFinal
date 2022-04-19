@@ -93,6 +93,13 @@ class Books:
         books = self.book_repo.get_from_log(id_user)
         return books
 
+
+    @join_point
+    @validate_arguments
+    def get_active(self, id_user: int):
+        books = self.book_repo.get_active(id_user)
+        return books
+
     @join_point
     def send_to_users(self, sep_ids):
         for ids in sep_ids:

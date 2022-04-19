@@ -53,11 +53,9 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
     def get_from_log(self, id_user: int):
         res = self.session.query(BOOK.c.title).join(LOGBOOK, BOOK.c.id == LOGBOOK.c.id_book).filter(
             LOGBOOK.c.id_user == id_user).all()
-        print('!!!!!', res)
-        # query = select(LOGBOOK.c.id_book).where(LOGBOOK.c.id_user == id_user)
-        # ids = self.session.execute(query).fetchall()
-        # print('AAAAAAAAA', ids)
-        # query2 = select(BOOK.c.title).where(BOOK.c.id.in_(ids))
-        #
-        # res = self.session.execute(query2).fetchall()
+        return res
+
+    def get_active(self, id_user: int):
+        res = self.session.query(BOOK.c.title).filter(
+            BOOK.c.owner == id_user, BOOK.c.is_bought == False).all()
         return res

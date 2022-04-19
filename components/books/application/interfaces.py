@@ -35,3 +35,6 @@ class BooksRepo(ABC):
 
     @abstractmethod
     def get_top3(self, ids): ...
+
+    @abstractmethod
+    def get_active(self, id_user: int): ...
