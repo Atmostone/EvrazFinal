@@ -66,6 +66,16 @@ class Books:
         response.media = {
             'message': 'Вы успешно купили книгу'
         }
+
+    @join_point
+    @authenticate
+    def on_get_show_history(self, request, response):
+        id_user = request.get_param_as_int('id_user')
+        books = self.books.get_history(id_user)
+
+        response.media = {
+            'books': str(books)
+        }
     @join_point
     @authenticate
     def on_get_show_all(self, request, response):

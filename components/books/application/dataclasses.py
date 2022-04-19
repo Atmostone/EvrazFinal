@@ -25,3 +25,10 @@ class Book:
     url: Optional[str] = None
     error: Optional[str] = None
     id: Optional[int] = None
+
+
+@attr.dataclass
+class LogBook:
+    id: int
+    id_user: int
+    id_book: int

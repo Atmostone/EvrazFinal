@@ -32,3 +32,11 @@ BOOK = Table(
     Column('expiration_date', DateTime, default=None),
     Column('owner', Integer, default=None),
 )
+
+LOGBOOK = Table(
+    'logbook',
+    metadata,
+    Column('id', Integer, primary_key=True, autoincrement=True),
+    Column('id_user', Integer),
+    Column('id_book', Integer),
+)

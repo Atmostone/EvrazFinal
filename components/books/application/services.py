@@ -64,6 +64,7 @@ class Books:
         if (book.expiration_date is None or book.expiration_date < datetime.now()) and (
                 book.owner is None or book.owner == id_user):
             self.book_repo.take_book(id_book=id_book, id_user=id_user, days=days)
+            self.book_repo.add_to_log(id_book=id_book, id_user=id_user)
         else:
             raise Exception
 
@@ -85,6 +86,12 @@ class Books:
             self.book_repo.buy_book(id_book=id_book, id_user=id_user)
         else:
             raise Exception
+
+    @join_point
+    @validate_arguments
+    def get_history(self, id_user: int):
+        books = self.book_repo.get_from_log(id_user)
+        return books
 
     @join_point
     def send_to_users(self, sep_ids):
