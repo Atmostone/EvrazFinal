@@ -37,8 +37,6 @@ class BookInfo(DTO):
     error: Optional[str] = None
 
 
-
-
 @component
 class Books:
     book_repo: interfaces.BooksRepo
@@ -60,14 +58,33 @@ class Books:
 
     @join_point
     @validate_arguments
-    def take_book(self, id_book: int, id_user: int, days: Optional[int]):
+    def take_book(self, id_book: int, id_user: int, days: int):
         book = self.book_repo.get_by_id(id_book)
-        print(book)
 
-        if book.expiration_date is None or book.expiration_date < datetime.now():
-            self.book_repo.take_book(id_book=id_book, id_user=id_user)
+        if (book.expiration_date is None or book.expiration_date < datetime.now()) and (
+                book.owner is None or book.owner == id_user):
+            self.book_repo.take_book(id_book=id_book, id_user=id_user, days=days)
+        else:
+            raise Exception
 
+    @join_point
+    @validate_arguments
+    def return_book(self, id_book: int, id_user: int):
+        book = self.book_repo.get_by_id(id_book)
 
+        if id_user == book.owner:
+            self.book_repo.return_book(id_book=id_book)
+
+    @join_point
+    @validate_arguments
+    def buy_book(self, id_book: int, id_user: int):
+
+        book = self.book_repo.get_by_id(id_book)
+
+        if book.owner == id_user and not book.is_bought:
+            self.book_repo.buy_book(id_book=id_book, id_user=id_user)
+        else:
+            raise Exception
 
     @join_point
     def send_to_users(self, sep_ids):

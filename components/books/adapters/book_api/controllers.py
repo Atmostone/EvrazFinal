@@ -53,6 +53,21 @@ class Books:
 
     @join_point
     @authenticate
+    def on_post_return_book(self, request, response):
+        self.books.return_book(**request.media)
+        response.media = {
+            'message': 'Вы успешно вернули книгу'
+        }
+
+    @join_point
+    @authenticate
+    def on_post_buy_book(self, request, response):
+        self.books.buy_book(**request.media)
+        response.media = {
+            'message': 'Вы успешно купили книгу'
+        }
+    @join_point
+    @authenticate
     def on_get_show_all(self, request, response):
         books = self.books.get_all()
         response.media = [{

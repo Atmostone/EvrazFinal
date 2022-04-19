@@ -33,11 +33,15 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
         query = BOOK.delete().where(BOOK.c.id == book_id)
         return self.session.execute(query)
 
-    def return_book(self, book_id: int):
-        query = update(BOOK).where(BOOK.c.id == book_id).values(user_id=None)
+    def return_book(self, id_book: int):
+        query = update(BOOK).where(BOOK.c.id == id_book).values(owner=None, expiration_date=None)
         return self.session.execute(query)
 
-    def take_book(self, id_book: int, id_user: int):
+    def buy_book(self, id_book: int, id_user: int):
+        query = update(BOOK).where(BOOK.c.id == id_book).values(owner=id_user, expiration_date=None, is_bought=True)
+        return self.session.execute(query)
+
+    def take_book(self, id_book: int, id_user: int, days: int):
         query = update(BOOK).where(BOOK.c.id == id_book).values(owner=id_user,
-                                                              expiration_date=datetime.now() + timedelta(days=10))
+                                                                expiration_date=datetime.now() + timedelta(days=days))
         return self.session.execute(query)
