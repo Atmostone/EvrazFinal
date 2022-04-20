@@ -10,6 +10,7 @@ from pydantic import validate_arguments
 
 from . import interfaces
 from .dataclasses import Book
+from .exceptions import NotFound, NotAvailable
 
 join_points = PointCut()
 join_point = join_points.join_point
@@ -48,7 +49,7 @@ class Books:
     def get_info(self, id: int):
         book = self.book_repo.get_by_id(id)
         if not book:
-            raise Exception
+            raise NotFound
         return book
 
     @join_point
@@ -66,7 +67,7 @@ class Books:
             self.book_repo.take_book(id_book=id_book, id_user=id_user, days=days)
             self.book_repo.add_to_log(id_book=id_book, id_user=id_user)
         else:
-            raise Exception
+            raise NotAvailable
 
     @join_point
     @validate_arguments
@@ -85,7 +86,7 @@ class Books:
         if book.owner == id_user and not book.is_bought:
             self.book_repo.buy_book(id_book=id_book, id_user=id_user)
         else:
-            raise Exception
+            raise NotAvailable
 
     @join_point
     @validate_arguments

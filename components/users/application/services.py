@@ -6,6 +6,7 @@ from evraz.classic.components import component
 from pydantic import validate_arguments
 from evraz.classic.messaging import Message, Publisher
 
+from application.exceptions import NotFound, NotAvailable
 from . import interfaces
 from .dataclasses import User
 
@@ -30,7 +31,7 @@ class Users:
     def get_info(self, id: int):
         user = self.user_repo.get_by_id(id)
         if not user:
-            raise Exception
+            raise NotFound
         return user
 
     @join_point
@@ -51,18 +52,18 @@ class Users:
     def login_user(self, user_login: str, user_password: str):
         user = self.user_repo.get_by_login(user_login)
         if not user:
-            raise Exception
+            raise NotFound
         if user.password == user_password:
             return user
         else:
-            raise Exception
+            raise NotAvailable
 
     @join_point
     @validate_arguments
     def delete_user(self, id: int):
         user = self.user_repo.get_by_id(id)
         if not user:
-            raise Exception
+            raise NotFound
         self.user_repo.delete_instance(id)
 
     @join_point
