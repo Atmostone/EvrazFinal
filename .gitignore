@@ -100,7 +100,7 @@ Temporary Items
 .idea/
 /tmp/
 /database.db
-/setup.cfg
+/yapf-isort.cfg
 /setup.py
 venv
 libs

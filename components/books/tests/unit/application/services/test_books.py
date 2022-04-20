@@ -1,10 +1,11 @@
 import pytest
+
 from application.services import Books
 
 
 @pytest.fixture(scope='function')
 def service(book_repo):
-    return Books(book_repo=book_repo,)
+    return Books(book_repo=book_repo, )
 
 
 def test__get_all(service, book):

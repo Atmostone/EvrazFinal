@@ -1,9 +1,8 @@
-from adapters import database, message_bus, user_api
+from kombu import Connection
+
+from adapters import database, message_bus
 from application import services
 from composites.user_api import DB
-from evraz.classic.sql_storage import TransactionContext
-from kombu import Connection
-from sqlalchemy import create_engine
 
 
 class Settings:

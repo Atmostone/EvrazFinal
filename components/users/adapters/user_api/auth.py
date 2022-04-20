@@ -22,6 +22,6 @@ def generate_token(user) -> str:
         'name': user.name,
         'group': 'User'
     },
-                       'my_secret_jwt',
-                       algorithm='HS256')
+        'my_secret_jwt',
+        algorithm='HS256')
     return token

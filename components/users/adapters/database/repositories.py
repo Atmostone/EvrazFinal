@@ -1,11 +1,11 @@
 from typing import List, Optional
 
-from application import interfaces
-from application.dataclasses import User
 from evraz.classic.components import component
 from evraz.classic.sql_storage import BaseRepository
-from sqlalchemy import delete, desc, func, insert, select
+from sqlalchemy import desc, select
 
+from application import interfaces
+from application.dataclasses import User
 from .tables import USER
 
 

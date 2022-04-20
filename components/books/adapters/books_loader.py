@@ -1,5 +1,3 @@
-import datetime
-
 import requests
 from evraz.classic.aspects import PointCut
 from evraz.classic.messaging import Message

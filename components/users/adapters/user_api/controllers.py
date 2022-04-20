@@ -1,8 +1,7 @@
-import jwt
-from application import services
 from evraz.classic.components import component
 from evraz.classic.http_auth import authenticate, authenticator_needed
 
+from application import services
 from .auth import generate_token
 from .join_points import join_point
 

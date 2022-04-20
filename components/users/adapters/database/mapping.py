@@ -1,6 +1,7 @@
+from sqlalchemy.orm import registry
+
 from adapters.database import tables
 from application import dataclasses
-from sqlalchemy.orm import registry
 
 mapper = registry()
 

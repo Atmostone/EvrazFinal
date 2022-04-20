@@ -24,8 +24,8 @@ class BooksRepo(ABC):
 
     @abstractmethod
     def return_book(
-        self,
-        id_book: int,
+            self,
+            id_book: int,
     ):
         ...
 

@@ -1,12 +1,12 @@
 from datetime import datetime, timedelta
 from typing import List, Optional
 
-from application import interfaces
-from application.dataclasses import Book, LogBook
 from evraz.classic.components import component
 from evraz.classic.sql_storage import BaseRepository
 from sqlalchemy import asc, desc, insert, select, update
 
+from application import interfaces
+from application.dataclasses import Book
 from .tables import BOOK, LOGBOOK
 
 

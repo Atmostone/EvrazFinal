@@ -1,4 +1,5 @@
 import pytest
+
 from application.services import Users
 
 test_data_user = {
@@ -10,7 +11,7 @@ test_data_user = {
 
 @pytest.fixture(scope='function')
 def service(user_repo):
-    return Users(user_repo=user_repo,)
+    return Users(user_repo=user_repo, )
 
 
 def test__get_by_id(service, user):
