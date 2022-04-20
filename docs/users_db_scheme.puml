@@ -1,0 +1,38 @@
+@startuml
+header Evraz final
+title DB scheme
+
+skinparam linetype ortho
+
+
+entity books{
+    * ** id ** int: PK
+    * ** title ** str
+    * ** subtitle **: str
+    * ** authors **: str
+    * ** publisher **: str
+    * ** isbn10 **: int
+    * ** isbn13 **: int
+    * ** pages **: int
+    * ** year **: int
+    * ** rating **: int
+    * ** desc **: str
+    * ** price **: float
+    * ** language **: float
+    * ** image **: str
+    * ** url **: str
+    * ** owner **: int
+    * ** is_bought **: bool
+    * ** expiration_date **: datetime
+    * ** error **: str
+}
+
+entity book_users{
+    * ** id ** int: PK
+    * **user_id**: int
+    * **book_id**: int FK
+}
+
+books ||--o{ book_users
+
+@enduml

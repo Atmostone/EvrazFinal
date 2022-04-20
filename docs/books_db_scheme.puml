@@ -1,0 +1,51 @@
+@startuml
+header Evraz project
+title DB scheme
+
+skinparam linetype ortho
+
+
+'LEGEND:
+'* - mandatory
+'before -- - identifying
+'** - for better reading
+
+entity users{
+    * **user_id**: int PK
+    --
+    * **username**: str
+    * **email**: str
+    * **password**: str
+}
+
+entity books{
+    * ** book_id** int: PK
+    --
+    * **title** str
+    * **subtitle**: str
+    * **authors**: str
+    * **publisher**: str
+    * **isbn10**: int
+    * **isbn13**: int
+    * **pages**: int
+    * **year**: int
+    * **rating**: int
+    * **desc**: str
+    * **price**: float
+    * **image**: str
+    * **url**: str
+    * **owned**: bool
+}
+
+entity book_users{
+    * **user_id**: int FK
+    * **book_id**: int FK
+    * **rent_dt**: datetime
+    * **return_dt**: datetime
+    * **rent_days**: int
+}
+
+users ||--o{ book_users
+books ||--o{ book_users
+
+@enduml
