@@ -104,16 +104,13 @@ class Books:
     def send_to_users(self, sep_ids):
         for ids in sep_ids:
             books = self.book_repo.get_top3(ids)
-            print(books)
             titles = []
             for book in books:
                 titles.append(book.title)
             self.user_publisher.publish(Message('queue', {'books': titles}))
-            print('Send', titles)
 
     @join_point
     def get_all(self, params) -> List[Book]:
-        print(params)
         order_by = None
         sort_by = None
         price = None

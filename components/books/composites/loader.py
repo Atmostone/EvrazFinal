@@ -47,7 +47,6 @@ class Application:
 def load_books(tags, publisher):
     loader = Loader(books_service=Application.books)
     ids = loader.load(tags, publisher)
-    print('IDS!!!!!!!!!!!!!!!', ids)
     Application.books.send_to_users(ids)
 
 

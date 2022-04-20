@@ -36,12 +36,9 @@ class Loader:
                 request_data = requests.get(f'https://api.itbook.store/1.0/search/{tag}/{i}', verify=False).json()
                 for book in request_data.get('books'):
                     ids.append(book.get('isbn13'))
-                    print(book.get('isbn13'))
 
             for id in ids:
                 response = requests.get(f'https://api.itbook.store/1.0/books/{id}', verify=False).json()
-
-                print(response)
 
                 publisher.publish(Message('queue', {'data': response}))
             sep_ids.append(ids)
