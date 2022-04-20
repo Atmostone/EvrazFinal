@@ -12,6 +12,10 @@ from sqlalchemy import select, update, desc, asc, insert
 @component
 class BooksRepo(BaseRepository, interfaces.BooksRepo):
 
+    @staticmethod
+    def price_converter(price: str):
+        return int(price[1:])
+
     def get_by_id(self, book_id: int) -> Optional[Book]:
         query = select(BOOK).where(BOOK.c.id == book_id)
         result = self.session.execute(query).fetchone()
@@ -25,8 +29,34 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
         return self.session.query(Book).filter(Book.isbn13.in_(ids)).order_by(
             desc(Book.rating), asc(Book.year)).limit(3).all()
 
-    def get_all(self) -> List[Book]:
+    def get_all(self, order_by=None, sort_by=None, price=None, keyword=None, author=None, publisher=None) -> List[Book]:
+
         query = select(BOOK)
+        if price:
+            query = query.where(BOOK.c.price == price)
+
+        if keyword:
+            search = "%{}%".format(keyword)
+            query = query.where(BOOK.c.title.like(search))
+
+        if author:
+            query = query.where(BOOK.c.author == author)
+
+        if publisher:
+            query = query.where(BOOK.c.publisher == publisher)
+
+        if order_by and sort_by:
+            if order_by == 'asc':
+                if sort_by == 'price':
+                    query = query.order_by(asc(BOOK.c.price))
+                elif sort_by == 'pages':
+                    query = query.order_by(asc(BOOK.c.pages))
+            elif order_by == 'desc':
+                if sort_by == 'price':
+                    query = query.order_by(desc(BOOK.c.price))
+                elif sort_by == 'pages':
+                    query = query.order_by(desc(BOOK.c.pages))
+
         return self.session.execute(query).fetchall()
 
     def delete_instance(self, book_id: int):

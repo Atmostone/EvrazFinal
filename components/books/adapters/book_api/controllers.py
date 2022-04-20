@@ -40,6 +40,7 @@ class Books:
             'price': book.price,
             'language': book.language,
             'is_bought': book.is_bought,
+            'expiration_date': str(book.expiration_date),
             'owner': book.owner,
         }
 
@@ -90,13 +91,15 @@ class Books:
     @join_point
     @authenticate
     def on_get_show_all(self, request, response):
-        books = self.books.get_all()
+        books = self.books.get_all(request.params)
         response.media = [{
-            'id': book.id,
+                        'id': book.id,
             'title': book.title,
             'subtitle': book.subtitle,
+
             'authors': book.authors,
             'publisher': book.publisher,
+
             'isbn10': book.isbn10,
             'isbn13': book.isbn13,
             'pages': book.pages,
@@ -109,3 +112,6 @@ class Books:
             'expiration_date': str(book.expiration_date),
             'owner': book.owner,
         } for book in books]
+
+
+"Фильтр по цене  /ключевому слову/автору  /издателю. Сортировка по цене/размеру."

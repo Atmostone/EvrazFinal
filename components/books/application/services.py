@@ -93,7 +93,6 @@ class Books:
         books = self.book_repo.get_from_log(id_user)
         return books
 
-
     @join_point
     @validate_arguments
     def get_active(self, id_user: int):
@@ -117,6 +116,25 @@ class Books:
             print('Send', titles)
 
     @join_point
-    def get_all(self) -> List[Book]:
-        books = self.book_repo.get_all()
+    def get_all(self, params) -> List[Book]:
+        print(params)
+        order_by = None
+        sort_by = None
+        price = None
+        keyword = None
+        author = None
+        publisher = None
+        if 'order_by' and 'sort_by' in params:
+            order_by = params['order_by']
+            sort_by = params['sort_by']
+        if 'price' in params:
+            price = params['price']
+        if 'keyword' in params:
+            keyword = params['keyword']
+        if 'author' in params:
+            author = params['author']
+        if 'publisher' in params:
+            publisher = params['publisher']
+
+        books = self.book_repo.get_all(order_by, sort_by, price, keyword, author, publisher)
         return books
