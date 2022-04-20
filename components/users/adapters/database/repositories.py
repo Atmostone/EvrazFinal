@@ -15,7 +15,7 @@ class UsersRepo(BaseRepository, interfaces.UsersRepo):
         result = self.session.execute(query).fetchone()
         return result
 
-    def add_instance(self, user: User):
+    def add_user(self, user: User):
         query = USER.insert().values(name=user.name, login=user.login, password=user.password)
         self.session.execute(query)
         new_user = select(USER).order_by(desc(USER.c.id))
@@ -30,7 +30,7 @@ class UsersRepo(BaseRepository, interfaces.UsersRepo):
         query = USER.delete().where(USER.c.id == user_id)
         return self.session.execute(query)
 
-    def get_by_login(self, user_login: str) -> Optional[User]:
+    def login_user(self, user_login: str) -> Optional[User]:
         query = select(USER).where(USER.c.login == user_login)
         result = self.session.execute(query).fetchone()
         return result

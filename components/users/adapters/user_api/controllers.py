@@ -17,7 +17,7 @@ class Users:
     @authenticate
     def on_get_show_info(self, request, response):
         request.params['id'] = request.context.client.user_id
-        user = self.users.get_info(**request.params)
+        user = self.users.get_by_id(**request.params)
         response.media = {
             'user id': user.id,
             'user name': user.name,

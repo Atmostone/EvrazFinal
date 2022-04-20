@@ -28,7 +28,7 @@ class Users:
 
     @join_point
     @validate_arguments
-    def get_info(self, id: int):
+    def get_by_id(self, id: int):
         user = self.user_repo.get_by_id(id)
         if not user:
             raise NotFound
@@ -38,7 +38,7 @@ class Users:
     @validate_with_dto
     def add_user(self, user_info: UserInfo):
         new_user = user_info.create_obj(User)
-        new_user = self.user_repo.add_instance(new_user)
+        new_user = self.user_repo.add_user(new_user)
         return new_user
 
     @join_point
@@ -50,7 +50,7 @@ class Users:
     @join_point
     @validate_arguments
     def login_user(self, user_login: str, user_password: str):
-        user = self.user_repo.get_by_login(user_login)
+        user = self.user_repo.login_user(user_login)
         if not user:
             raise NotFound
         if user.password == user_password:
