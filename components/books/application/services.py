@@ -46,7 +46,7 @@ class Books:
 
     @join_point
     @validate_arguments
-    def get_info(self, id: int):
+    def get_by_id(self, id: int):
         book = self.book_repo.get_by_id(id)
         if not book:
             raise NotFound
@@ -91,7 +91,7 @@ class Books:
     @join_point
     @validate_arguments
     def get_history(self, id_user: int):
-        books = self.book_repo.get_from_log(id_user)
+        books = self.book_repo.get_history(id_user)
         return books
 
     @join_point

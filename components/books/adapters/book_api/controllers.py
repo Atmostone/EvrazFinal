@@ -16,7 +16,7 @@ class Books:
     @join_point
     @authenticate
     def on_get_show_info(self, request, response):
-        book = self.books.get_info(**request.params)
+        book = self.books.get_by_id(**request.params)
         response.media = {
             'id': book.id,
             'title': book.title,

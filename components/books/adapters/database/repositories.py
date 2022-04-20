@@ -80,7 +80,7 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
         query = insert(LOGBOOK).values(id_book=id_book, id_user=id_user)
         self.session.execute(query)
 
-    def get_from_log(self, id_user: int):
+    def get_history(self, id_user: int):
         res = self.session.query(BOOK.c.title).join(LOGBOOK, BOOK.c.id == LOGBOOK.c.id_book).filter(
             LOGBOOK.c.id_user == id_user).all()
         return res
