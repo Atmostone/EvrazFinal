@@ -43,12 +43,6 @@ class Loader:
 
                 print(response)
 
-                publisher.publish(
-                    Message(
-                        'queue',
-                        {
-                            'data': response
-                        })
-                )
+                publisher.publish(Message('queue', {'data': response}))
             sep_ids.append(ids)
         return sep_ids

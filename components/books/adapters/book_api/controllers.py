@@ -1,10 +1,10 @@
 import json
-from datetime import datetime, date
+from datetime import date, datetime
 
+from application import services
 from evraz.classic.components import component
 from evraz.classic.http_auth import authenticate, authenticator_needed
 
-from application import services
 from .join_points import join_point
 
 
@@ -40,25 +40,19 @@ class Books:
     @authenticate
     def on_post_take_book(self, request, response):
         self.books.take_book(**request.media)
-        response.media = {
-            'message': 'Вы успешно взяли книгу'
-        }
+        response.media = {'message': 'Вы успешно взяли книгу'}
 
     @join_point
     @authenticate
     def on_post_return_book(self, request, response):
         self.books.return_book(**request.media)
-        response.media = {
-            'message': 'Вы успешно вернули книгу'
-        }
+        response.media = {'message': 'Вы успешно вернули книгу'}
 
     @join_point
     @authenticate
     def on_post_buy_book(self, request, response):
         self.books.buy_book(**request.media)
-        response.media = {
-            'message': 'Вы успешно купили книгу'
-        }
+        response.media = {'message': 'Вы успешно купили книгу'}
 
     @join_point
     @authenticate
@@ -66,9 +60,7 @@ class Books:
         id_user = request.get_param_as_int('id_user')
         books = self.books.get_history(id_user)
 
-        response.media = {
-            'books': str(books)
-        }
+        response.media = {'books': str(books)}
 
     @join_point
     @authenticate
@@ -76,22 +68,18 @@ class Books:
         id_user = request.get_param_as_int('id_user')
         books = self.books.get_active(id_user)
 
-        response.media = {
-            'books': str(books)
-        }
+        response.media = {'books': str(books)}
 
     @join_point
     @authenticate
     def on_get_show_all(self, request, response):
         books = self.books.get_all(request.params)
         response.media = [{
-                        'id': book.id,
+            'id': book.id,
             'title': book.title,
             'subtitle': book.subtitle,
-
             'authors': book.authors,
             'publisher': book.publisher,
-
             'isbn10': book.isbn10,
             'isbn13': book.isbn13,
             'pages': book.pages,

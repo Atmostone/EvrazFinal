@@ -1,16 +1,14 @@
-from evraz.classic.sql_storage import TransactionContext
-from kombu import Connection
-from sqlalchemy import create_engine
-
 from adapters import book_api, database, message_bus
 from application import services
 from composites.book_api import DB
+from evraz.classic.sql_storage import TransactionContext
+from kombu import Connection
+from sqlalchemy import create_engine
 
 
 class Settings:
     db = database.Settings()
     message_bus = message_bus.Settings()
-
 
 
 class Application:

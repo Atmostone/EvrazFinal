@@ -6,8 +6,8 @@ from . import auth, controllers
 
 
 def create_app(
-        is_dev_mode: bool,
-        users: services.Users,
+    is_dev_mode: bool,
+    users: services.Users,
 ) -> App:
     app = App(prefix='/api')
     authenticator = Authenticator(app_groups=auth.ALL_GROUPS)

@@ -1,5 +1,5 @@
-from evraz.classic.http_auth import Group, Permission, strategies
 import jwt
+from evraz.classic.http_auth import Group, Permission, strategies
 
 
 class Permissions:
@@ -10,9 +10,7 @@ class Groups:
     USERS = Group('User', permissions=(Permissions.FULL_CONTROL,))
 
 
-jwt_strategy = strategies.JWT(
-    secret_key='my_secret_jwt'
-)
+jwt_strategy = strategies.JWT(secret_key='my_secret_jwt')
 
 ALL_GROUPS = (Groups.USERS,)
 
@@ -23,6 +21,7 @@ def generate_token(user) -> str:
         'login': user.login,
         'name': user.name,
         'group': 'User'
-
-    }, 'my_secret_jwt', algorithm='HS256')
+    },
+                       'my_secret_jwt',
+                       algorithm='HS256')
     return token

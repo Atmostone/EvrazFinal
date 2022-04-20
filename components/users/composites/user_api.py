@@ -1,11 +1,10 @@
-from adapters import user_api, database, message_bus
+from adapters import database, message_bus, user_api
 from application import services
+from evraz.classic.messaging_kombu import KombuPublisher
 from evraz.classic.sql_storage import TransactionContext
+from kombu import Connection
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
-from kombu import Connection
-from evraz.classic.messaging_kombu import KombuPublisher
 
 
 class Settings:
@@ -29,22 +28,20 @@ class MessageBus:
     publisher = KombuPublisher(
         connection=connection,
         scheme=message_bus.broker_scheme,
-        messages_params={
-            'queue': {
-                'exchange': 'exchange',
-                'routing_key': 'books',
-            }
-        }, )
+        messages_params={'queue': {
+            'exchange': 'exchange',
+            'routing_key': 'books',
+        }},
+    )
 
     user_publisher = KombuPublisher(
         connection=connection,
         scheme=message_bus.broker_scheme,
-        messages_params={
-            'queue': {
-                'exchange': 'exchange',
-                'routing_key': 'users',
-            }
-        }, )
+        messages_params={'queue': {
+            'exchange': 'exchange',
+            'routing_key': 'users',
+        }},
+    )
 
 
 class Application:
@@ -60,5 +57,4 @@ class Aspects:
 app = user_api.create_app(
     is_dev_mode=Application.is_dev_mode,
     users=Application.users,
-
 )

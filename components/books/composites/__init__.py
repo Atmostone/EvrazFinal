@@ -1,2 +1,1 @@
-from . import book_api
-from . import consumer
+from . import book_api, consumer

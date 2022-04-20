@@ -1,17 +1,16 @@
 import pytest
-
 from application.services import Books
 
 
 @pytest.fixture(scope='function')
 def service(book_repo):
-    return Books(
-        book_repo=book_repo,
-    )
+    return Books(book_repo=book_repo,)
 
 
 def test__get_all(service, book):
-    assert service.get_all([None]) == [book, ]
+    assert service.get_all([None]) == [
+        book,
+    ]
 
 
 def test__get_by_id(service, book):
@@ -31,8 +30,12 @@ def test__buy_book(service, book):
 
 
 def test__get_history(service, book):
-    assert service.get_history(1) == [book, ]
+    assert service.get_history(1) == [
+        book,
+    ]
 
 
 def test__get_active(service, book):
-    assert service.get_active(1) == [book, ]
+    assert service.get_active(1) == [
+        book,
+    ]

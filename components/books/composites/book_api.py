@@ -1,11 +1,10 @@
+from adapters import book_api, database, message_bus
+from application import services
 from evraz.classic.messaging_kombu import KombuPublisher
 from evraz.classic.sql_storage import TransactionContext
 from kombu import Connection
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
-from adapters import book_api, database, message_bus
-from application import services
 
 
 class Settings:
@@ -29,28 +28,27 @@ class MessageBus:
     publisher = KombuPublisher(
         connection=connection,
         scheme=message_bus.broker_scheme,
-        messages_params={
-            'queue': {
-                'exchange': 'exchange',
-                'routing_key': 'books',
-            }
-        },)
+        messages_params={'queue': {
+            'exchange': 'exchange',
+            'routing_key': 'books',
+        }},
+    )
 
     user_publisher = KombuPublisher(
         connection=connection,
         scheme=message_bus.broker_scheme,
-        messages_params={
-            'queue': {
-                'exchange': 'exchange',
-                'routing_key': 'users',
-            }
-        },
+        messages_params={'queue': {
+            'exchange': 'exchange',
+            'routing_key': 'users',
+        }},
     )
 
 
 class Application:
     is_dev_mode = Settings.book_api.IS_DEV_MODE
-    books = services.Books(book_repo=DB.books_repo, publisher=MessageBus.publisher, user_publisher=MessageBus.user_publisher)
+    books = services.Books(
+        book_repo=DB.books_repo, publisher=MessageBus.publisher, user_publisher=MessageBus.user_publisher
+    )
 
 
 class Aspects:
@@ -61,5 +59,4 @@ class Aspects:
 app = book_api.create_app(
     is_dev_mode=Application.is_dev_mode,
     books=Application.books,
-
 )

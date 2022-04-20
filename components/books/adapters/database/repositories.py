@@ -3,10 +3,11 @@ from typing import List, Optional
 
 from application import interfaces
 from application.dataclasses import Book, LogBook
-from .tables import BOOK, LOGBOOK
 from evraz.classic.components import component
 from evraz.classic.sql_storage import BaseRepository
-from sqlalchemy import select, update, desc, asc, insert
+from sqlalchemy import asc, desc, insert, select, update
+
+from .tables import BOOK, LOGBOOK
 
 
 @component
@@ -26,8 +27,8 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
         self.session.flush()
 
     def get_top3(self, ids):
-        return self.session.query(Book).filter(Book.isbn13.in_(ids)).order_by(
-            desc(Book.rating), asc(Book.year)).limit(3).all()
+        return self.session.query(Book).filter(Book.isbn13.in_(ids)).order_by(desc(Book.rating),
+                                                                              asc(Book.year)).limit(3).all()
 
     def get_all(self, order_by=None, sort_by=None, price=None, keyword=None, author=None, publisher=None) -> List[Book]:
 
@@ -72,8 +73,9 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
         return self.session.execute(query)
 
     def take_book(self, id_book: int, id_user: int, days: int):
-        query = update(BOOK).where(BOOK.c.id == id_book).values(owner=id_user,
-                                                                expiration_date=datetime.now() + timedelta(days=days))
+        query = update(BOOK).where(BOOK.c.id == id_book).values(
+            owner=id_user, expiration_date=datetime.now() + timedelta(days=days)
+        )
         return self.session.execute(query)
 
     def add_to_log(self, id_book: int, id_user: int):
@@ -81,11 +83,11 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
         self.session.execute(query)
 
     def get_history(self, id_user: int):
-        res = self.session.query(BOOK.c.title).join(LOGBOOK, BOOK.c.id == LOGBOOK.c.id_book).filter(
-            LOGBOOK.c.id_user == id_user).all()
+        res = self.session.query(BOOK.c.title
+                                 ).join(LOGBOOK,
+                                        BOOK.c.id == LOGBOOK.c.id_book).filter(LOGBOOK.c.id_user == id_user).all()
         return res
 
     def get_active(self, id_user: int):
-        res = self.session.query(BOOK.c.title).filter(
-            BOOK.c.owner == id_user, BOOK.c.is_bought == False).all()
+        res = self.session.query(BOOK.c.title).filter(BOOK.c.owner == id_user, BOOK.c.is_bought == False).all()
         return res

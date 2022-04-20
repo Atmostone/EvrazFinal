@@ -1,6 +1,6 @@
 import json
 from datetime import datetime, timedelta
-from typing import Optional, List
+from typing import List, Optional
 
 from evraz.classic.app import DTO
 from evraz.classic.aspects import PointCut
@@ -10,7 +10,7 @@ from pydantic import validate_arguments
 
 from . import interfaces
 from .dataclasses import Book
-from .exceptions import NotFound, NotAvailable
+from .exceptions import NotAvailable, NotFound
 
 join_points = PointCut()
 join_point = join_points.join_point
@@ -62,8 +62,8 @@ class Books:
     def take_book(self, id_book: int, id_user: int, days: int):
         book = self.book_repo.get_by_id(id_book)
 
-        if (book.expiration_date is None or book.expiration_date < datetime.now()) and (
-                book.owner is None or book.owner == id_user):
+        if (book.expiration_date is None or book.expiration_date < datetime.now()) and (book.owner is None or
+                                                                                        book.owner == id_user):
             self.book_repo.take_book(id_book=id_book, id_user=id_user, days=days)
             self.book_repo.add_to_log(id_book=id_book, id_user=id_user)
         else:
@@ -108,12 +108,7 @@ class Books:
             titles = []
             for book in books:
                 titles.append(book.title)
-            self.user_publisher.publish(
-                Message('queue',
-                        {
-                            'books': titles
-                        })
-            )
+            self.user_publisher.publish(Message('queue', {'books': titles}))
             print('Send', titles)
 
     @join_point

@@ -2,14 +2,16 @@ from typing import List, Optional
 
 from application import interfaces
 from application.dataclasses import User
-from .tables import USER
 from evraz.classic.components import component
 from evraz.classic.sql_storage import BaseRepository
-from sqlalchemy import delete, select, insert, func, desc
+from sqlalchemy import delete, desc, func, insert, select
+
+from .tables import USER
 
 
 @component
 class UsersRepo(BaseRepository, interfaces.UsersRepo):
+
     def get_by_id(self, user_id: int) -> Optional[User]:
         query = select(USER).where(USER.c.id == user_id)
         result = self.session.execute(query).fetchone()

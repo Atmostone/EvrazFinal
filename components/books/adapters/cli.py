@@ -2,6 +2,7 @@ import click
 
 
 def create_cli(load_books, publisher):
+
     @click.group()
     def cli():
         pass
